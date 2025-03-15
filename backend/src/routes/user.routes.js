@@ -1,26 +1,20 @@
 import { Router } from "express";
-import { changeCurrentPassword, deleteFromHistory, getUserChannelProfile, getWatchHistory, loginUser, logoutUser, registerUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage } from "../controllers/user.controller.js";
+import { clearHistory, deleteFromHistory, getWatchHistory, loginUser, logoutUser, registerUser, updateAccountDetails, getUserInfo, getChannelInfo, userVideos, getUserLikedVideos, removeFromLikesVideos } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 const router = Router()
 
 
-router.route("/register").post(
-    upload.fields([
-        { name: "avatar", maxCount: 1 },
-        { name: "coverImage", maxCount: 1 },
-    ])
-    , registerUser)
-
+router.post('/register', registerUser)
 router.route('/login').post(loginUser)
-router.route('/logout').post(verifyJWT, logoutUser)
-
-router.route('/change-password').post(verifyJWT, changeCurrentPassword)
-router.route('/update-account').patch(verifyJWT, updateAccountDetails)
-router.route('/update-avatar').patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
-router.route('/update-cover-Image').patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
-router.route('/channel/:username').get(verifyJWT, getUserChannelProfile)
-router.route('/watchHistory').get(verifyJWT, getWatchHistory)
-router.route('/deleteFromHistory/:videoId').patch(verifyJWT, deleteFromHistory)
-
+router.route('/logout').post(authMiddleware, logoutUser)
+router.route('/update-account').patch(authMiddleware, upload.any('avatar'), updateAccountDetails)
+router.route('/watchHistory').get(authMiddleware, getWatchHistory)
+router.route('/deleteFromHistory/:videoId').patch(authMiddleware, deleteFromHistory)
+router.post('/clearHistory', authMiddleware, clearHistory)
+router.get('/userInfo', authMiddleware, getUserInfo)
+router.get('/:channelId', getChannelInfo)
+router.get('/you/channel', authMiddleware, userVideos)
+router.get('/you/likedVideos', authMiddleware, getUserLikedVideos)
+router.patch('/:videoId/likedRemove', authMiddleware, removeFromLikesVideos)
 export default router

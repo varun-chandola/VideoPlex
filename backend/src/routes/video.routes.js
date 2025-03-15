@@ -1,41 +1,34 @@
 import { Router } from 'express';
 import {
     deleteVideo,
+    getAllCategories,
     getAllVideos,
     getVideoById,
+    getVideoDetails,
+    getVideosFromACategory,
     publishAVideo,
-    togglePublishStatus,
+    suggestedVideos,
     updateVideo,
 } from "../controllers/video.controller.js"
-import { verifyJWT } from "../middlewares/auth.middleware.js"
+import { authMiddleware } from "../middlewares/auth.middleware.js"
 import { upload } from "../middlewares/multer.middleware.js"
 
 const router = Router();
-router.use(verifyJWT);
+router.use(authMiddleware);
 
 router
     .route("/")
     .get(getAllVideos)
-    .post(
-        upload.fields([
-            {
-                name: "videoFile",
-                maxCount: 1,
-            },
-            {
-                name: "thumbnail",
-                maxCount: 1,
-            },
+    .post(upload.fields([{ name: "videoFile", maxCount: 1, }, { name: "thumbnail", maxCount: 1, },]), publishAVideo);
 
-        ]),
-        publishAVideo
-    );
-
+router.get('/categories', getAllCategories)
+router.get('/:categoryName/videos', getVideosFromACategory)
 router
     .route("/:videoId")
     .get(getVideoById)
     .delete(deleteVideo)
-    .patch(upload.single("thumbnail"), updateVideo);
+    .patch(upload.any("thumbnail"), updateVideo);
 
-router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
+router.get('/:videoId/suggest', suggestedVideos)
+router.get('/:videoId/details', getVideoDetails)
 export default router
