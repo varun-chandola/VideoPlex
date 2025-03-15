@@ -1,17 +1,18 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-
 import userRoutes from "./routes/user.routes.js"
 import videoRoutes from "./routes/video.routes.js"
 import likeRoutes from "./routes/like.routes.js"
 import subscribeRoutes from "./routes/subscription.routes.js"
 import playlistRoutes from "./routes/playlist.routes.js"
 import commentRoutes from "./routes/comment.routes.js"
+import dotenv from "dotenv"
+dotenv.config()
 const app = express()
 
 app.use(cors({
-    origin: `http://localhost:5173`,
+    origin: process.env.CLIENT_URL,
     credentials: true
 }))
 
