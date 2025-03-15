@@ -10,7 +10,6 @@ import Home from './pages/Home.jsx'
 import Explore from './pages/Explore.jsx'
 import Channel from "./pages/Channel.jsx"
 import History from './components/History.jsx'
-import Profile from "./components/Profile.jsx"
 import Likes from './components/Likes.jsx'
 import Playlist from "./pages/Playlist.jsx"
 import CreatorChannel from "./pages/CreatorChannel.jsx"
@@ -38,7 +37,6 @@ createRoot(document.getElementById('root')).render(
           <Route path='/playlist' element={<Playlist />} />
           <Route path='/channel/:channelId' element={<CreatorChannel />} />
           <Route path='/settings' element={<Settings />} />
-          <Route path='/profile' element={<Profile />} />
           <Route path='/watch/:videoId' element={<Video />} />
           <Route path='/publish' element={<Publish />} />
         </Route>
