@@ -5,10 +5,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-    },
-    email: {
-        type: String,
-        required: true,
+        unique: true
     },
     fullName: {
         type: String,
@@ -16,19 +13,20 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        required: true
+        default: 'https://res.cloudinary.com/da2fioulc/image/upload/v1738252225/pjbrwhinxhd6w9kx0wga.jpg'
     },
-    coverImage: {
+    bio: {
         type: String,
+        default: ""
     },
-    watchHistory: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Video'
-    }],
     password: {
         type: String,
         required: true
     },
+    watchHistory: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Video'
+    }]
 
 }, { timestamps: true }, { strict: false })
 
@@ -36,7 +34,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
     if (!(this.isModified("password"))) return next()
 
-    this.password = await bcrypt.hash(this.password, 10)
+    this.password = await bcrypt.hash(this.password, 8)
     next()
 })
 
