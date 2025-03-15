@@ -1,5 +1,13 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
+import { AdvancedVideo } from "@cloudinary/react"
+import { Cloudinary } from "@cloudinary/url-gen"
+import { context } from "./Context"
 
+const cld = new Cloudinary({
+    cloud: {
+        cloudName: `${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}`
+    }
+});
 const VideoPlayer = ({ videoURL }) => {
     const cloudinaryRef = useRef()
     const videoRef = useRef()
@@ -17,9 +25,8 @@ const VideoPlayer = ({ videoURL }) => {
             ref={videoRef}
             src={`${videoURL}`}
             controls
-            height={600}
-            width={`1100px`}
-            className='rounded-xl'
+            width={750}
+            className={`rounded-xl`}
         />
     )
 }
