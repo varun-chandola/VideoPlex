@@ -10,6 +10,6 @@ connectDB().then(() => {
     app.on("error", (error) => {
         console.log("ERROR ON EXPRESS SERVER : ", error)
     })
-    app.listen(process.env.PORT || 8000, () => console.log(`server running on ${process.env.PORT}`))
+    app.listen(process.env.PORT || 8080, () => console.log(`server running on ${process.env.PORT}`))
 })
     .catch(err => console.log("MONGO DB CONNECTION FAILED : ", err))
